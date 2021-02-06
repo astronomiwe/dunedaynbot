@@ -1,0 +1,10 @@
+
+config.py
+
+venv/
+
+.idea/
+
+__pycache__/
+
+Карта функций 0.1.0.xmind
