@@ -4,17 +4,18 @@ from config import TOKEN
 from keyboa import keyboa_maker
 from keyboards import main_menu, member_menu, events_menu, action_menu
 
-import psycopg2
+# import psycopg2
 from config import DB_LOGIN_DATA
 
 bot = telebot.TeleBot(TOKEN)
 last_id = None
+last_username = None
 
 # коннект с БД
-conn = psycopg2.connect(dbname=DB_LOGIN_DATA[0], user=DB_LOGIN_DATA[1], password=DB_LOGIN_DATA[2],
-                        host=DB_LOGIN_DATA[3])
-cursor = conn.cursor()
-conn.autocommit = True
+# conn = psycopg2.connect(dbname=DB_LOGIN_DATA[0], user=DB_LOGIN_DATA[1], password=DB_LOGIN_DATA[2],
+#                         host=DB_LOGIN_DATA[3])
+# cursor = conn.cursor()
+# conn.autocommit = True
 
 # создаём клавиатуры
 kb_main_menu = keyboa_maker(items=main_menu, copy_text_to_callback=True)
@@ -31,7 +32,7 @@ def reply(text='Здесь пока ничего нет', next_menu=None):
     global last_id
     bot.send_message(
         chat_id=last_id,
-        text=text,
+        text=str(last_id) + ' ' + text + str(last_username),
         reply_markup=next_menu)
 
 
@@ -39,6 +40,8 @@ def reply(text='Здесь пока ничего нет', next_menu=None):
 def mainMenu(message):
     global last_id
     last_id = message.from_user.id
+    global last_username
+    last_username = message.from_user.username
     reply('Привет! Что тебя интересует?', kb_main_menu)
 
 
